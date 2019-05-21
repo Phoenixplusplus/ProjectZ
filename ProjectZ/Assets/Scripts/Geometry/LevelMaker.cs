@@ -89,6 +89,7 @@ public class LevelMaker : MonoBehaviour
 
     public void ResetLevelGeometry()
     {
+        levelMover.StopCoroutines();
         DestroyFloor();
         ResetFloorPosition();
     }

@@ -27,7 +27,11 @@ public class LevelManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space)) level.MoveLevel(moveUnitsByAmount, unitsMoveTime);
         if (Input.GetKeyDown(KeyCode.Alpha1)) level.MakeFloor(levelType, levelUnits);
-        if (Input.GetKeyDown(KeyCode.Alpha2)) level.ResetLevelGeometry();
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            atUnit = 0;
+            level.ResetLevelGeometry();
+        }
     }
 
     // Events

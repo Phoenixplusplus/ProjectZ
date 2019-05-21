@@ -22,13 +22,9 @@ public class LevelMover : MonoBehaviour
     {
         
     }
-
-    void OnDestroy()
-    {
-        StopAllCoroutines();
-    }
     #endregion
 
+    public void StopCoroutines() { StopAllCoroutines(); }
     public void MoveLevel(int amount, float time) { StartCoroutine(MoveLevelIE(amount, time)); }
 
     IEnumerator MoveLevelIE(int amount, float time)
