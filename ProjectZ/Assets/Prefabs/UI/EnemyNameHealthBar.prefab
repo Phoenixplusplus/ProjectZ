@@ -477,6 +477,8 @@ MonoBehaviour:
   rareMiniBossColour: {r: 0.7169812, g: 0.40611556, b: 0.24688502, a: 1}
   bossColour: {r: 0.27069238, g: 0.34825304, b: 0.745283, a: 1}
   RareBossColour: {r: 0.5729246, g: 0.3496351, b: 0.9150943, a: 1}
+  mainCamera: {fileID: 5872718211668447714, guid: 424712e046eaad94a976b17cb33ce280,
+    type: 3}
   enemyName_UI: {fileID: 9184772963413934686}
   enemyImportance_UI: {fileID: 127494782743000900}
   enemyHealth_UI: {fileID: 1924429768128134864}

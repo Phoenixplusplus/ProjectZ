@@ -7,23 +7,25 @@ public class EnemyOverheadUI : MonoBehaviour
 {
     [Header("Overhead UI")]
     [SerializeField]
-    Color rareColour;
+    Color rareColour = Color.white;
     [SerializeField]
-    Color miniBossColour;
+    Color miniBossColour = Color.white;
     [SerializeField]
-    Color rareMiniBossColour;
+    Color rareMiniBossColour = Color.white;
     [SerializeField]
-    Color bossColour;
+    Color bossColour = Color.white;
     [SerializeField]
-    Color RareBossColour;
+    Color RareBossColour = Color.white;
 
     [Header("References")]
     [SerializeField]
-    Text enemyName_UI;
+    GameObject mainCamera = null;
     [SerializeField]
-    Text enemyImportance_UI;
+    Text enemyName_UI = null;
     [SerializeField]
-    Slider enemyHealth_UI;
+    Text enemyImportance_UI = null;
+    [SerializeField]
+    Slider enemyHealth_UI = null;
 
     #region Unity API
     // Start is called before the first frame update
@@ -35,7 +37,8 @@ public class EnemyOverheadUI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        // Keep this element facing the camera
+        transform.rotation = mainCamera.transform.rotation;
     }
     #endregion
 

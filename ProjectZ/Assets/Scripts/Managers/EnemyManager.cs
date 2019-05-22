@@ -11,12 +11,11 @@ public class EnemyManager : MonoBehaviour
     public EnemyChances enemyChances;
 
     [Header("Made Enemies")]
-    [SerializeField]
-    List<GameObject> madeEnemies = new List<GameObject>();
+    public List<GameObject> madeEnemies = new List<GameObject>();
 
     [Header("Class References")]
     [SerializeField]
-    EnemyMaker enemyMaker;
+    EnemyMaker enemyMaker = null;
 
     #region Unity API
     // Start is called before the first frame update
@@ -29,30 +28,7 @@ public class EnemyManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            for (int i = 0; i < 5; i++)
-            {
-                madeEnemies.Add(enemyMaker.MakeEnemy((EnemyName)Random.Range(0, 3), true, 1, new Vector3(10, 0, 0), new Vector3(0, 90, 0)));
-            }
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha4))
-        {
-            // If ever needing to attack all enemies available..
-            // While iterating over a list, it is possible an earlier element has been removed, and will cause problems.
-            // Create a temperary list and iterate through that, which may subsequently cause their kill event to happen
-            // and be removed from the original list
-            List<GameObject> tempList = new List<GameObject>();
-            for (int i = 0; i < madeEnemies.Count; i++)
-            {
-                tempList.Add(madeEnemies[i]);
-            }
-            foreach (GameObject enemy in tempList)
-            {
-                enemy.GetComponent<Enemy>().TakeDamage(5);
-            }
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha5)) DestroyAllEnemies();
+
     }
 
     // Events
@@ -66,7 +42,63 @@ public class EnemyManager : MonoBehaviour
     }
     #endregion
 
-    void DestroyAllEnemies()
+    // GameManager calls
+    #region GameManager Calls
+    public void AttackAllEnemies()
+    {
+        // If ever needing to attack all enemies available..
+        // While iterating over a list, it is possible an earlier element has been removed, and will cause problems.
+        // Create a temperary list and iterate through that, which may subsequently cause their kill event to happen
+        // and be removed from the original list
+        List<GameObject> tempList = new List<GameObject>();
+        for (int i = 0; i < madeEnemies.Count; i++)
+        {
+            tempList.Add(madeEnemies[i]);
+        }
+        foreach (GameObject enemy in tempList)
+        {
+            enemy.GetComponent<Enemy>().TakeDamage(5);
+        }
+    }
+
+    // Enemy Spawning
+    // Random enemy importance
+    public void SpawnEnemy(int amount, int atUnit, EnemyName enemyName, bool randomRareImportance, int stage, Vector3[] positions, Vector3 rotation)
+    {
+        for (int i = 0; i < amount; i++)
+        {
+            madeEnemies.Add(enemyMaker.MakeEnemy(enemyName, randomRareImportance, stage, positions[i], rotation));
+        }
+    }
+
+    // Fixed enemy importance
+    public void SpawnEnemy(int amount, int atUnit, EnemyName enemyName, EnemyImportance enemyImportance, bool randomRareImportance, int stage, Vector3[] positions, Vector3 rotation)
+    {
+        for (int i = 0; i < amount; i++)
+        {
+            madeEnemies.Add(enemyMaker.MakeEnemy(enemyName, enemyImportance, randomRareImportance, stage, positions[i], rotation));
+        }
+    }
+
+    // Random enemy with fixed importance
+    public void SpawnEnemy(int amount, int atUnit, EnemyImportance enemyImportance, bool randomRareImportance, int stage, Vector3[] positions, Vector3 rotation)
+    {
+        for (int i = 0; i < amount; i++)
+        {
+            madeEnemies.Add(enemyMaker.MakeEnemy(enemyMaker.GetRandomEnemyName(), enemyImportance, randomRareImportance, stage, positions[i], rotation));
+        }
+    }
+
+    // Random enemy with random importance
+    public void SpawnEnemy(int amount, int atUnit, bool randomRareImportance, int stage, Vector3[] positions, Vector3 rotation)
+    {
+        for (int i = 0; i < amount; i++)
+        {
+            madeEnemies.Add(enemyMaker.MakeEnemy(enemyMaker.GetRandomEnemyName(), randomRareImportance, stage, positions[i], rotation));
+        }
+    }
+
+    public void DestroyAllEnemies()
     {
         foreach (GameObject enemy in madeEnemies)
         {
@@ -76,10 +108,11 @@ public class EnemyManager : MonoBehaviour
     }
 
     // Callback to event from EventManager, which passed the killedEnemy through
-    void DestroyEnemy(GameObject killedEnemy)
+    public void DestroyEnemy(GameObject killedEnemy)
     {
-        Debug.Log("EnemyManager has heard from EventManager that " + killedEnemy.name + " has died, Destorying it..");
+        Debug.Log("EnemyManager:: Heard from EventManager that " + killedEnemy.name + " has died, Destorying it..");
         madeEnemies.Remove(killedEnemy);
         Destroy(killedEnemy);
     }
+    #endregion
 }

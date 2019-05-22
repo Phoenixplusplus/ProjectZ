@@ -11,6 +11,9 @@ public class EventManager : MonoBehaviour
     // An Enemy has died
     public delegate void PassOnEnemyDeath(GameObject killedEnemy);
     public static event PassOnEnemyDeath PassOnEnemyDied;
+    // An Enemy was clicked on
+    public delegate void PassOnEnemyClicked(Enemy selectedEnemy);
+    public static event PassOnEnemyClicked PassOnEnemySelected;
 
     #region Unity API
     // Start is called before the first frame update
@@ -30,10 +33,13 @@ public class EventManager : MonoBehaviour
     {
         LevelMover.UnitIncremented += BroadcastLevelUnitIncremented;
         Enemy.EnemyDied += BroadcastEnemyDied;
+        Enemy.EnemySelected += BroadcastEnemySelected;
     }
     void OnDisable()
     {
         LevelMover.UnitIncremented -= BroadcastLevelUnitIncremented;
+        Enemy.EnemyDied -= BroadcastEnemyDied;
+        Enemy.EnemySelected -= BroadcastEnemySelected;
     }
     #endregion
 
@@ -41,11 +47,18 @@ public class EventManager : MonoBehaviour
     void BroadcastLevelUnitIncremented()
     {
         if (PassOnUnitIncremented != null) PassOnUnitIncremented();
-        Debug.Log("Heared from LevelMover that it has incremented a Unit.. Broadcasting");
+        Debug.Log("EventManager:: Heared from LevelMover that it has incremented a Unit.. Broadcasting");
     }
+
     void BroadcastEnemyDied(GameObject killedEnemy)
     {
         if (PassOnEnemyDied != null) PassOnEnemyDied(killedEnemy);
-        Debug.Log("Heared from an Enemy that " + killedEnemy.name + " has died.. Broadcasting");
+        Debug.Log("EventManager:: Heared from an Enemy that " + killedEnemy.name + " has died.. Broadcasting");
+    }
+
+    void BroadcastEnemySelected(Enemy selectedEnemy)
+    {
+        if (PassOnEnemySelected != null) PassOnEnemySelected(selectedEnemy);
+        Debug.Log("EventManager:: Heared from Enemy that it has been clicked on.. Broadcasting");
     }
 }

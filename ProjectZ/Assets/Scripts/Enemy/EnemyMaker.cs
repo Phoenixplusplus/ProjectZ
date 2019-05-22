@@ -41,16 +41,19 @@ public class EnemyMaker : MonoBehaviour
                 madeEnemy = Instantiate(enemies.E_Cube, position + cubeOffset, Quaternion.identity);
                 madeEnemy.transform.eulerAngles = rotation;
                 ConfigureEnemy(madeEnemy, enemyImportance, randomRareImportance, stage);
+                madeEnemy.transform.parent = this.gameObject.transform;
                 return madeEnemy;
             case EnemyName.E_Capsule:
                 madeEnemy = Instantiate(enemies.E_Capsule, position + capsuleOffset, Quaternion.identity);
                 madeEnemy.transform.eulerAngles = rotation;
                 ConfigureEnemy(madeEnemy, enemyImportance, randomRareImportance, stage);
+                madeEnemy.transform.parent = this.gameObject.transform;
                 return madeEnemy;
             case EnemyName.E_Sphere:
                 madeEnemy = Instantiate(enemies.E_Sphere, position + sphereOffset, Quaternion.identity);
                 madeEnemy.transform.eulerAngles = rotation;
                 ConfigureEnemy(madeEnemy, enemyImportance, randomRareImportance, stage);
+                madeEnemy.transform.parent = this.gameObject.transform;
                 return madeEnemy;
             default: return madeEnemy;
         }
@@ -64,22 +67,25 @@ public class EnemyMaker : MonoBehaviour
                 madeEnemy = Instantiate(enemies.E_Cube, position + cubeOffset, Quaternion.identity);
                 madeEnemy.transform.eulerAngles = rotation;
                 ConfigureEnemy(madeEnemy, randomRareImportance, stage);
+                madeEnemy.transform.parent = this.gameObject.transform;
                 return madeEnemy;
             case EnemyName.E_Capsule:
                 madeEnemy = Instantiate(enemies.E_Capsule, position + capsuleOffset, Quaternion.identity);
                 madeEnemy.transform.eulerAngles = rotation;
                 ConfigureEnemy(madeEnemy, randomRareImportance, stage);
+                madeEnemy.transform.parent = this.gameObject.transform;
                 return madeEnemy;
             case EnemyName.E_Sphere:
                 madeEnemy = Instantiate(enemies.E_Sphere, position + sphereOffset, Quaternion.identity);
                 madeEnemy.transform.eulerAngles = rotation;
                 ConfigureEnemy(madeEnemy, randomRareImportance, stage);
+                madeEnemy.transform.parent = this.gameObject.transform;
                 return madeEnemy;
             default: return madeEnemy;
         }
     }
 
-    // Main function for configuring enemies, will call all other functions
+    // Main function for configuring enemy data, will call all other functions
     // overload with EnemyImportance if a set importance is desired, else it will randomise it between Normal and MiniBoss
     void ConfigureEnemy(GameObject madeEnemy, EnemyImportance enemyImportance, bool randomRareImportance, int stage)
     {
@@ -150,5 +156,11 @@ public class EnemyMaker : MonoBehaviour
             defence = Mathf.FloorToInt((enemyStats.defence * GetStageMultiplier(stage)) * GetImportanceMultiplier(enemyImportance)),
             agility = Mathf.FloorToInt((enemyStats.agility * GetStageMultiplier(stage)) * GetImportanceMultiplier(enemyImportance))
         };
+    }
+
+    // Get random enemy name
+    public EnemyName GetRandomEnemyName()
+    {
+        return (EnemyName)Random.Range(0, System.Enum.GetValues(typeof(EnemyName)).Length);
     }
 }

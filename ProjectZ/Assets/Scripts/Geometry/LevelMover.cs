@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class LevelMover : MonoBehaviour
 {
-    // Create event for incrementing a Unit
+    // Event to be sent when incrementing a Unit
     public delegate void UnitChange();
     public static event UnitChange UnitIncremented;
 
-    public float floorLength;
+    public float floorLength, floorWidth, floorHeight;
 
     #region Unity API
     // Start is called before the first frame update

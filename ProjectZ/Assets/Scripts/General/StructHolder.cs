@@ -42,3 +42,11 @@ public struct EnemyChances
     public float miniBossRareChance;
     public float bossRareChance;
 }
+
+// Level
+[System.Serializable]
+public struct FloorPrefabs
+{
+    public GameObject grassFloor;
+    public GameObject sandFloor;
+}

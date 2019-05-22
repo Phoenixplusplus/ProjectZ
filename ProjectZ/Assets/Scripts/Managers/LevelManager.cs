@@ -6,14 +6,15 @@ public class LevelManager : MonoBehaviour
 {
     [Header("Level Characteristics")]
     public LevelType levelType;
-    public int levelUnits = 10;
+    public int levelUnits = 0;
     public int moveUnitsByAmount = 1;
     public float unitsMoveTime = 1f;
-    public int atUnit { get; private set; } = 0;
+    public int atUnit = 1;
+    public bool endOfLevel = false;
 
     [Header("Class References")]
     [SerializeField]
-    LevelMaker level;
+    LevelMaker levelMaker = null;
 
     #region Unity API
     // Start is called before the first frame update
@@ -25,13 +26,7 @@ public class LevelManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space)) level.MoveLevel(moveUnitsByAmount, unitsMoveTime);
-        if (Input.GetKeyDown(KeyCode.Alpha1)) level.MakeFloor(levelType, levelUnits);
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            atUnit = 0;
-            level.ResetLevelGeometry();
-        }
+
     }
 
     // Events
@@ -45,5 +40,48 @@ public class LevelManager : MonoBehaviour
     }
     #endregion
 
-    void IncrementAtUnit() { atUnit++; Debug.Log("Heared from EventManager that a Unit has been incremented, atUnit now " + atUnit); }
+    void IncrementAtUnit()
+    {
+        if (atUnit < levelUnits)
+        {
+            atUnit++;
+            Debug.Log("LevelManager:: Heared from EventManager that a Unit has been incremented, atUnit now " + atUnit);
+        }
+    }
+
+    // Get next enemy spawn positions
+    public Vector3[] GetNextEnemySpawnPositions(int amount)
+    {
+        return levelMaker.GetNextEnemySpawnPositions(amount, atUnit);
+    }
+
+    // GameManager calls
+    #region GameManager Calls
+    public bool MoveLevel()
+    {
+        if (atUnit < levelUnits)
+        {
+            levelMaker.MoveLevel(moveUnitsByAmount, unitsMoveTime);
+            return true;
+        }
+        else
+        {
+            endOfLevel = true;
+            Debug.Log("We are at unit " + atUnit + " of a maximum " + levelUnits + " units");
+            return false;
+        }
+    }
+
+    public void MakeLevel()
+    {
+        levelMaker.MakeFloor(levelType, levelUnits);
+    }
+
+    public void ResetLevel()
+    {
+        endOfLevel = false;
+        atUnit = 1;
+        levelMaker.ResetLevelGeometry();
+    }
+    #endregion
 }
