@@ -151,9 +151,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stage: 1
   stageComplete: 0
-  enemiesToSpawn: 2
+  enemiesToSpawn: 4
   levelManager: {fileID: 1630990808}
   enemyManager: {fileID: 1775567295}
+  playerManager: {fileID: 297449086}
   selectedEnemy: {fileID: 0}
 --- !u!4 &83805718
 Transform:
@@ -168,6 +169,52 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &297449085
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 297449087}
+  - component: {fileID: 297449086}
+  m_Layer: 0
+  m_Name: PlayerManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &297449086
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 297449085}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4210d445e3b92014188b2d968a272389, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerStatMultipliers:
+    expToNextLevelMultiplier: 1.04
+  playerConfigurer: {fileID: 1330608755}
+--- !u!4 &297449087
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 297449085}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &545704178
 GameObject:
@@ -456,6 +503,8 @@ GameObject:
   - component: {fileID: 1330608752}
   - component: {fileID: 1330608751}
   - component: {fileID: 1330608750}
+  - component: {fileID: 1330608754}
+  - component: {fileID: 1330608755}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -535,8 +584,47 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+--- !u!114 &1330608754
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1330608749}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8167a530ca6f9dd42965121f21c9831f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerElement: 0
+  playerStats:
+    level: 1
+    HP: 10
+    SP: 5
+    attackPower: 2
+    defence: 0
+    agility: 1
+    accuracy: 1
+    criticalChance: 5
+    criticalDamage: 0
+    criticalMultiplier: 1.5
+    exp: 0
+    expToNextLevel: 10
+--- !u!114 &1330608755
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1330608749}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9285c7e2fedb5146ae799229a5b8a77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 1330608754}
 --- !u!1 &1630990807
 GameObject:
   m_ObjectHideFlags: 0

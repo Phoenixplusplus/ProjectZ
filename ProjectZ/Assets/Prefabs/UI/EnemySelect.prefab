@@ -115,7 +115,7 @@ MonoBehaviour:
   baseScale: {x: 0.004, y: 0.004, z: 1}
   scaleDivision: 6
   initialColour: {r: 1, g: 1, b: 1, a: 1}
-  endColour: {r: 1, g: 0, b: 0, a: 1}
+  endColour: {r: 0.764151, g: 0.764151, b: 0.764151, a: 1}
   mainCamera: {fileID: 5872718211668447714, guid: 424712e046eaad94a976b17cb33ce280,
     type: 3}
   imageRing: {fileID: 9117848045153035199}
@@ -178,7 +178,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []

@@ -17,7 +17,7 @@ public class EnemyOverheadUI : MonoBehaviour
     [SerializeField]
     Color RareBossColour = Color.white;
 
-    [Header("References")]
+    [Header("Object References")]
     [SerializeField]
     GameObject mainCamera = null;
     [SerializeField]

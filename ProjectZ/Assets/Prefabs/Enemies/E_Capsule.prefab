@@ -109,7 +109,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyImportance: 0
-  enemyElement: 0
+  enemyElement: 1
   enemyName: 1
   enemyStats:
     level: 1
@@ -118,8 +118,14 @@ MonoBehaviour:
     attackPower: 2
     defence: 1
     agility: 1
+    criticalChance: 3
+    criticalDamage: 0
+    criticalMultiplier: 1
+    exp: 5
   enemyOverheadUI: {fileID: 6597356254956842403}
   enemySelectUI: {fileID: 7546616170733658915}
+  damageNumberUI: {fileID: 8184686460477014729, guid: 8128a32375b070746920bc5e20238efc,
+    type: 3}
 --- !u!1001 &4458064218956548371
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -232,6 +238,11 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 6631625687487176815, guid: 77ad9f93b83496540b23cf6ffe04363a,
+        type: 3}
+      propertyPath: m_Name
+      value: EnemyNameHealthBar
+      objectReference: {fileID: 0}
     - target: {fileID: 2049421228933587278, guid: 77ad9f93b83496540b23cf6ffe04363a,
         type: 3}
       propertyPath: m_AnchorMax.x
@@ -241,11 +252,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6631625687487176815, guid: 77ad9f93b83496540b23cf6ffe04363a,
-        type: 3}
-      propertyPath: m_Name
-      value: EnemyNameHealthBar
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 77ad9f93b83496540b23cf6ffe04363a, type: 3}
@@ -274,11 +280,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4263907134042424652}
     m_Modifications:
-    - target: {fileID: 9117848045051996301, guid: 78dbc294bd9ebb94bb0860280f96b4d8,
-        type: 3}
-      propertyPath: m_Name
-      value: EnemySelect
-      objectReference: {fileID: 0}
     - target: {fileID: 9117848045051996305, guid: 78dbc294bd9ebb94bb0860280f96b4d8,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -390,6 +391,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 5872718211668447714, guid: 424712e046eaad94a976b17cb33ce280,
         type: 3}
+    - target: {fileID: 9117848045051996301, guid: 78dbc294bd9ebb94bb0860280f96b4d8,
+        type: 3}
+      propertyPath: m_Name
+      value: EnemySelect
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 78dbc294bd9ebb94bb0860280f96b4d8, type: 3}
 --- !u!224 &621850099673478837 stripped

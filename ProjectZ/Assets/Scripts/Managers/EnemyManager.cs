@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class EnemyManager : MonoBehaviour
 {
+    // Events to be sent when all enemies have died
+    public delegate void AllEnemiesKilled();
+    public static event AllEnemiesKilled AllEnemiesDied;
+
     [Header("Stat Multipliers")]
     public EnemyStatMultipliers enemyStatMultipliers;
 
@@ -44,7 +48,7 @@ public class EnemyManager : MonoBehaviour
 
     // GameManager calls
     #region GameManager Calls
-    public void AttackAllEnemies()
+    public void AttackAllEnemies(int damageTaken, bool critical)
     {
         // If ever needing to attack all enemies available..
         // While iterating over a list, it is possible an earlier element has been removed, and will cause problems.
@@ -57,7 +61,7 @@ public class EnemyManager : MonoBehaviour
         }
         foreach (GameObject enemy in tempList)
         {
-            enemy.GetComponent<Enemy>().TakeDamage(5);
+            enemy.GetComponent<Enemy>().TakeDamage(damageTaken, critical);
         }
     }
 
@@ -108,11 +112,17 @@ public class EnemyManager : MonoBehaviour
     }
 
     // Callback to event from EventManager, which passed the killedEnemy through
-    public void DestroyEnemy(GameObject killedEnemy)
+    public void DestroyEnemy(GameObject killedEnemy, int exp)
     {
         Debug.Log("EnemyManager:: Heard from EventManager that " + killedEnemy.name + " has died, Destorying it..");
         madeEnemies.Remove(killedEnemy);
         Destroy(killedEnemy);
+
+        // Pass on an event if all enemies have been killed
+        if (madeEnemies.Count == 0)
+        {
+            if (AllEnemiesDied != null) AllEnemiesDied();
+        }
     }
     #endregion
 }

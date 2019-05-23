@@ -19,6 +19,8 @@ public class GameManager : MonoBehaviour
     LevelManager levelManager = null;
     [SerializeField]
     EnemyManager enemyManager = null;
+    [SerializeField]
+    PlayerManager playerManager = null;
 
     [Header("Currently Selected Enemy")]
     [SerializeField]
@@ -49,26 +51,45 @@ public class GameManager : MonoBehaviour
         {
             if (selectedEnemy)
             {
-                selectedEnemy.TakeDamage(5);
+                int playerDamage;
+                bool playerCriticalChance = playerManager.GetPlayerCriticalHit();
+                if (playerCriticalChance == true) playerDamage = playerManager.GetPlayerStats().criticalDamage;
+                else playerDamage = playerManager.GetPlayerStats().attackPower;
+
+                selectedEnemy.TakeDamage(playerDamage, playerCriticalChance);
             }
-            //enemyManager.AttackAllEnemies();
+            //enemyManager.AttackAllEnemies(Random.Range(1, 3), Random.value > 0.5f);
         }
         if (Input.GetKeyDown(KeyCode.Alpha5)) enemyManager.DestroyAllEnemies();
+        if (Input.GetKeyDown(KeyCode.W)) InitialiseLevel();
     }
 
     void OnEnable()
     {
         EventManager.PassOnEnemySelected += ChangeSelectedEnemy;
-        EventManager.PassOnEnemyDied += CheckSeletecEnemyDied;
+        EventManager.PassOnEnemyDied += AnEnemyDied;
+        EventManager.PassOnUnitIncrementedSuccessful += NewUnitSuccessfullyReached;
+        EventManager.PassOnAllEnemiesDied += AllEnemiesDied;
+        EventManager.PassOnAtEndOfLevel += EndOfLevelReached;
     }
 
     void OnDisable()
     {
         EventManager.PassOnEnemySelected -= ChangeSelectedEnemy;
-        EventManager.PassOnEnemyDied -= CheckSeletecEnemyDied;
+        EventManager.PassOnEnemyDied -= AnEnemyDied;
+        EventManager.PassOnUnitIncrementedSuccessful -= NewUnitSuccessfullyReached;
+        EventManager.PassOnAllEnemiesDied -= AllEnemiesDied;
+        EventManager.PassOnAtEndOfLevel -= EndOfLevelReached;
     }
     #endregion
 
+    void InitialiseLevel()
+    {
+        levelManager.MakeLevel();
+        NewUnitSuccessfullyReached();
+    }
+
+    #region Event Calls
     // Callback to event from EventManager, which passed the e_selectedEnemy through
     void ChangeSelectedEnemy(Enemy e_selectedEnemy)
     {
@@ -78,8 +99,46 @@ public class GameManager : MonoBehaviour
     }
 
     // Callback to event from EventManager, which passed the killedEnemy through
-    void CheckSeletecEnemyDied(GameObject killedEnemy)
+    // Called when any enemy dies
+    void AnEnemyDied(GameObject killedEnemy, int exp)
     {
+        Debug.Log("GameManager:: Heard from EventManager that " + killedEnemy.name + " has died.. Giving PlayerManager " + exp);
         if (killedEnemy.GetComponent<Enemy>() == selectedEnemy) selectedEnemy = null;
+        playerManager.GivePlayerEXP(exp); 
     }
+
+    // Callback to the EventManager, if the Level's Unit was successfully moved
+    void NewUnitSuccessfullyReached()
+    {
+        // Reached last unit? Spawn boss
+        if (levelManager.atUnit == levelManager.levelUnits)
+        {
+            Debug.Log("GameManager:: Heard from EventManager that a Unit was successfully incremented.. Spawning Boss");
+            enemyManager.SpawnEnemy(enemiesToSpawn, levelManager.atUnit, EnemyImportance.Boss, true, stage, levelManager.GetNextEnemySpawnPositions(enemiesToSpawn), new Vector3(0, 90, 0));
+        }
+        else
+        {
+            Debug.Log("GameManager:: Heard from EventManager that a Unit was successfully incremented.. Spawning next enemies");
+            enemyManager.SpawnEnemy(enemiesToSpawn, levelManager.atUnit, true, stage, levelManager.GetNextEnemySpawnPositions(enemiesToSpawn), new Vector3(0, 90, 0));
+        }
+    }
+
+    // Callback to the EventManager, all enemies have died
+    void AllEnemiesDied()
+    {
+        Debug.Log("GameManager:: Heard from EventManager that all enemies are dead.. Moving Level");
+        levelManager.MoveLevel();
+    }
+
+    //calledback to the EventManager, end of level has been reached
+    void EndOfLevelReached()
+    {
+        Debug.Log("GameManager:: Heard from EventManager that end of level reached.. Setting flag");
+        stageComplete = true;
+        stage++;
+        levelManager.ResetLevel();
+        levelManager.MakeLevel();
+        NewUnitSuccessfullyReached();
+    }
+    #endregion
 }

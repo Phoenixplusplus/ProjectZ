@@ -12,6 +12,10 @@ public struct EnemyStats
     public int attackPower;
     public int defence;
     public int agility;
+    public float criticalChance;
+    public int criticalDamage;
+    public float criticalMultiplier;
+    public int exp;
 }
 
 [System.Serializable]
@@ -41,6 +45,30 @@ public struct EnemyChances
     public float normalRareChance;
     public float miniBossRareChance;
     public float bossRareChance;
+}
+
+// Player
+[System.Serializable]
+public struct PlayerStats
+{
+    public int level;
+    public int HP;
+    public int SP;
+    public int attackPower;
+    public int defence;
+    public int agility;
+    public int accuracy;
+    public float criticalChance;
+    public int criticalDamage;
+    public float criticalMultiplier;
+    public int exp;
+    public int expToNextLevel;
+}
+
+[System.Serializable]
+public struct PlayerStatMultipliers
+{
+    public float expToNextLevelMultiplier;
 }
 
 // Level

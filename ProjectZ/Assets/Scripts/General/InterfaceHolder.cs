@@ -4,7 +4,7 @@ using UnityEngine;
 
 public interface IDamagable<T>
 {
-    void TakeDamage(T damageTaken);
+    void TakeDamage(T damageTaken, bool critical);
 }
 
 public interface IKillable

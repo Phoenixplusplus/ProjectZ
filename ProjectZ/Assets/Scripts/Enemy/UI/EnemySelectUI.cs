@@ -17,13 +17,11 @@ public class EnemySelectUI : MonoBehaviour
     [SerializeField]
     Color endColour = Color.red;
 
-    [Header("Class References")]
+    [Header("Object References")]
     [SerializeField]
     GameObject mainCamera = null;
     [SerializeField]
     Image imageRing = null;
-
-    bool startRoutine = false;
 
     #region Unity API
     // Start is called before the first frame update
@@ -54,7 +52,6 @@ public class EnemySelectUI : MonoBehaviour
     {
         StopAllCoroutines();
         this.gameObject.SetActive(true);
-        startRoutine = true;
         StartCoroutine(ScaleImage(time));
     }
 

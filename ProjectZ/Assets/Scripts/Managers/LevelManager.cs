@@ -4,6 +4,13 @@ using UnityEngine;
 
 public class LevelManager : MonoBehaviour
 {
+    // Event to be sent when level Unit has moved successfully
+    public delegate void UnitChangeSuccessful();
+    public static event UnitChangeSuccessful NewUnitSuccessful;
+    // Event to be sent when at the end of level
+    public delegate void EndOfLevel();
+    public static event EndOfLevel AtEndOfLevel;
+
     [Header("Level Characteristics")]
     public LevelType levelType;
     public int levelUnits = 0;
@@ -32,20 +39,21 @@ public class LevelManager : MonoBehaviour
     // Events
     void OnEnable()
     {
-        EventManager.PassOnUnitIncremented += IncrementAtUnit;
+        EventManager.PassOnUnitIncremented += IncrementLevelAtUnit;
     }
     void OnDisable()
     {
-        EventManager.PassOnUnitIncremented -= IncrementAtUnit;
+        EventManager.PassOnUnitIncremented -= IncrementLevelAtUnit;
     }
     #endregion
 
-    void IncrementAtUnit()
+    void IncrementLevelAtUnit()
     {
         if (atUnit < levelUnits)
         {
             atUnit++;
             Debug.Log("LevelManager:: Heared from EventManager that a Unit has been incremented, atUnit now " + atUnit);
+            if (NewUnitSuccessful != null) NewUnitSuccessful();
         }
     }
 
@@ -68,6 +76,7 @@ public class LevelManager : MonoBehaviour
         {
             endOfLevel = true;
             Debug.Log("We are at unit " + atUnit + " of a maximum " + levelUnits + " units");
+            if (AtEndOfLevel != null) AtEndOfLevel();
             return false;
         }
     }
