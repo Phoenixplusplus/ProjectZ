@@ -23,6 +23,12 @@ public class EventManager : MonoBehaviour
     // An Enemy was clicked on
     public delegate void PassOnEnemyClicked(Enemy selectedEnemy);
     public static event PassOnEnemyClicked PassOnEnemySelected;
+    // Player died
+    public delegate void PassOnPlayerDeath();
+    public static event PassOnPlayerDeath PassOnPlayerDied;
+    // An enemy wants to attack
+    public delegate void PassOnEnemyAttack(Enemy attackingEnemy);
+    public static event PassOnEnemyAttack PassOnEnemyWantsToAttack;
 
     #region Unity API
     // Start is called before the first frame update
@@ -43,18 +49,22 @@ public class EventManager : MonoBehaviour
         LevelMover.UnitIncremented += BroadcastLevelUnitIncremented;
         Enemy.EnemyDied += BroadcastEnemyDied;
         Enemy.EnemySelected += BroadcastEnemySelected;
+        Enemy.EnemyWantsToAttack += BroadcastEnemyWantsToAttack;
         LevelManager.NewUnitSuccessful += BroadcastNewUnitSuccessful;
         LevelManager.AtEndOfLevel += BroadcastAtEndOfLevel;
         EnemyManager.AllEnemiesDied += BroadcastAllEnemiesDied;
+        Player.PlayerDied += BroadcastPlayerDied;
     }
     void OnDisable()
     {
         LevelMover.UnitIncremented -= BroadcastLevelUnitIncremented;
         Enemy.EnemyDied -= BroadcastEnemyDied;
         Enemy.EnemySelected -= BroadcastEnemySelected;
+        Enemy.EnemyWantsToAttack -= BroadcastEnemyWantsToAttack;
         LevelManager.NewUnitSuccessful -= BroadcastNewUnitSuccessful;
         LevelManager.AtEndOfLevel -= BroadcastAtEndOfLevel;
         EnemyManager.AllEnemiesDied -= BroadcastAllEnemiesDied;
+        Player.PlayerDied -= BroadcastPlayerDied;
     }
     #endregion
 
@@ -93,5 +103,17 @@ public class EventManager : MonoBehaviour
     {
         if (PassOnAtEndOfLevel != null) PassOnAtEndOfLevel();
         Debug.Log("EventManager:: Heared from LevelManager that end of level reached.. Broadcasting");
+    }
+
+    void BroadcastPlayerDied()
+    {
+        if (PassOnPlayerDied != null) PassOnPlayerDied();
+        Debug.Log("EventManager:: Heared from Player that it has died.. Broadcasting");
+    }
+
+    void BroadcastEnemyWantsToAttack(Enemy attackingEnemy)
+    {
+        if (PassOnEnemyWantsToAttack != null) PassOnEnemyWantsToAttack(attackingEnemy);
+        Debug.Log("EventManager:: Heared from " + attackingEnemy.name + " it wants to attack.. Broadcasting");
     }
 }

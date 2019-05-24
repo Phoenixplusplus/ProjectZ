@@ -46,7 +46,7 @@ public class EnemyOverheadUI : MonoBehaviour
     {
         ConfigureImportanceUI(enemyImportance);
         enemyName_UI.text = "Lv." + enemyStats.level + " " + enemyName.ToString();
-        enemyHealth_UI.maxValue = enemyStats.HP;
+        enemyHealth_UI.maxValue = enemyStats.maxHP;
         enemyHealth_UI.value = enemyHealth_UI.maxValue;
     }
 

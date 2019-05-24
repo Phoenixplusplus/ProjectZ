@@ -113,10 +113,13 @@ MonoBehaviour:
   enemyStats:
     level: 1
     HP: 7
+    maxHP: 0
     SP: 5
+    maxSP: 0
     attackPower: 1
     defence: 1
     agility: 1
+    evadeChance: 5
     criticalChance: 3
     criticalDamage: 0
     criticalMultiplier: 1

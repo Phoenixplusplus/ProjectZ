@@ -21,6 +21,8 @@ public class GameManager : MonoBehaviour
     EnemyManager enemyManager = null;
     [SerializeField]
     PlayerManager playerManager = null;
+    [SerializeField]
+    UIManager uiManager = null;
 
     [Header("Currently Selected Enemy")]
     [SerializeField]
@@ -51,16 +53,18 @@ public class GameManager : MonoBehaviour
         {
             if (selectedEnemy)
             {
-                int playerDamage;
-                bool playerCriticalChance = playerManager.GetPlayerCriticalHit();
-                if (playerCriticalChance == true) playerDamage = playerManager.GetPlayerStats().criticalDamage;
-                else playerDamage = playerManager.GetPlayerStats().attackPower;
-
-                selectedEnemy.TakeDamage(playerDamage, playerCriticalChance);
+                enemyManager.EnemyTakeDamage(selectedEnemy, playerManager.GetPlayerStats());
             }
-            //enemyManager.AttackAllEnemies(Random.Range(1, 3), Random.value > 0.5f);
+            // Attack all enemies if one is not targeted, temporary
+            else
+            {
+                enemyManager.AllEnemiesTakeDamage(playerManager.GetPlayerStats());
+            }
         }
-        if (Input.GetKeyDown(KeyCode.Alpha5)) enemyManager.DestroyAllEnemies();
+        if (Input.GetKeyDown(KeyCode.Alpha5))
+        {
+            //uiManager.UpdatePlayerHP(playerManager.GetPlayerStats());
+        }
         if (Input.GetKeyDown(KeyCode.W)) InitialiseLevel();
     }
 
@@ -71,6 +75,8 @@ public class GameManager : MonoBehaviour
         EventManager.PassOnUnitIncrementedSuccessful += NewUnitSuccessfullyReached;
         EventManager.PassOnAllEnemiesDied += AllEnemiesDied;
         EventManager.PassOnAtEndOfLevel += EndOfLevelReached;
+        EventManager.PassOnPlayerDied += PlayerHasDied;
+        EventManager.PassOnEnemyWantsToAttack += EnemyAttackPlayer;
     }
 
     void OnDisable()
@@ -80,6 +86,8 @@ public class GameManager : MonoBehaviour
         EventManager.PassOnUnitIncrementedSuccessful -= NewUnitSuccessfullyReached;
         EventManager.PassOnAllEnemiesDied -= AllEnemiesDied;
         EventManager.PassOnAtEndOfLevel -= EndOfLevelReached;
+        EventManager.PassOnPlayerDied -= PlayerHasDied;
+        EventManager.PassOnEnemyWantsToAttack -= EnemyAttackPlayer;
     }
     #endregion
 
@@ -87,9 +95,16 @@ public class GameManager : MonoBehaviour
     {
         levelManager.MakeLevel();
         NewUnitSuccessfullyReached();
+        uiManager.ConfigurePlayerNameHPSPEXP_UI(playerManager.GetPlayerStats());
     }
 
     #region Event Calls
+    // Callback to event from EventManager, player has died
+    void PlayerHasDied()
+    {
+        Debug.Log("GameManager:: Heard from EventManager that player has died");
+    }
+
     // Callback to event from EventManager, which passed the e_selectedEnemy through
     void ChangeSelectedEnemy(Enemy e_selectedEnemy)
     {
@@ -104,7 +119,16 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("GameManager:: Heard from EventManager that " + killedEnemy.name + " has died.. Giving PlayerManager " + exp);
         if (killedEnemy.GetComponent<Enemy>() == selectedEnemy) selectedEnemy = null;
-        playerManager.GivePlayerEXP(exp); 
+        playerManager.GivePlayerEXP(exp);
+        uiManager.UpdatePlayerEXP(playerManager.GetPlayerStats());
+    }
+
+    // Callback from EventManager, an enemy wants to attack player
+    void EnemyAttackPlayer(Enemy attackingEnemy)
+    {
+        Debug.Log("GameManager:: Heard from EventManager that " + attackingEnemy.name + " wants to attack the player");
+        playerManager.PlayerTakeDamage(attackingEnemy);
+        uiManager.UpdatePlayerHP(playerManager.GetPlayerStats());
     }
 
     // Callback to the EventManager, if the Level's Unit was successfully moved
@@ -136,9 +160,12 @@ public class GameManager : MonoBehaviour
         Debug.Log("GameManager:: Heard from EventManager that end of level reached.. Setting flag");
         stageComplete = true;
         stage++;
+
+        Debug.Log("GameManager:: Restarting level at stage " + stage);
         levelManager.ResetLevel();
         levelManager.MakeLevel();
         NewUnitSuccessfullyReached();
+        stageComplete = false;
     }
     #endregion
 }

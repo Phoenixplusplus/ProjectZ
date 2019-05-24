@@ -47,10 +47,25 @@ public class PlayerConfigurer : MonoBehaviour
         player.playerStats.criticalDamage = Mathf.RoundToInt(player.playerStats.attackPower * player.playerStats.criticalMultiplier);
     }
 
-    public PlayerStats GetPlayerStats() { return player.playerStats; }
-    public bool GetPlayerCriticalHit()
+    public void ConfigureTakeDamage(Enemy attackingEnemy)
     {
-        if (Random.Range(0f, 100f) <= player.playerStats.criticalChance) return true;
-        else return false;
+        EnemyStats enemyStats = attackingEnemy.enemyStats;
+        int damageTaken = enemyStats.attackPower;
+        int criticalDamage = enemyStats.criticalDamage;
+        float criticalChance = enemyStats.criticalChance;
+
+        // Calculate if damage will be critical
+        bool isCritical;
+        if (Random.Range(0f, 100f) <= criticalChance) isCritical = true;
+        else isCritical = false;
+
+        // Check if attack will be evaded. If damage is critical, it cannot be evaded
+        if (Random.Range(0f, 100f) <= player.playerStats.evadeChance) damageTaken = 0;
+
+        if (isCritical) player.TakeDamage(criticalDamage, isCritical);
+        else player.TakeDamage(damageTaken, isCritical);
     }
+
+    public PlayerStats GetPlayerStats() { return player.playerStats; }
+    public float GetPlayerCriticalChance() { return player.playerStats.criticalChance; }
 }

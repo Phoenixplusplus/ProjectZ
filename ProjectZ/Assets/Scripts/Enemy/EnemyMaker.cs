@@ -151,12 +151,15 @@ public class EnemyMaker : MonoBehaviour
         {
             level = stage,
             HP = Mathf.RoundToInt((enemyStats.HP * GetStageMultiplier(stage)) * GetImportanceMultiplier(enemyImportance)),
+            maxHP = Mathf.RoundToInt((enemyStats.HP * GetStageMultiplier(stage)) * GetImportanceMultiplier(enemyImportance)),
             SP = Mathf.RoundToInt((enemyStats.SP * GetStageMultiplier(stage)) * GetImportanceMultiplier(enemyImportance)),
+            maxSP = Mathf.RoundToInt((enemyStats.SP * GetStageMultiplier(stage)) * GetImportanceMultiplier(enemyImportance)),
             attackPower = Mathf.RoundToInt((enemyStats.attackPower * GetStageMultiplier(stage)) * GetImportanceMultiplier(enemyImportance)),
             defence = Mathf.RoundToInt((enemyStats.defence * GetStageMultiplier(stage)) * GetImportanceMultiplier(enemyImportance)),
             agility = Mathf.RoundToInt((enemyStats.agility * GetStageMultiplier(stage)) * GetImportanceMultiplier(enemyImportance)),
-            criticalMultiplier = enemyStats.criticalMultiplier * GetImportanceMultiplier(enemyImportance),                                              // critical multiplier is not affected by stage
-            criticalChance = enemyStats.criticalChance * GetImportanceMultiplier(enemyImportance),                                                      // critical chance is not affected by stage
+            evadeChance = enemyStats.evadeChance * GetImportanceMultiplier(enemyImportance),                                                    // Evade chance is not affected by stage
+            criticalMultiplier = enemyStats.criticalMultiplier * GetImportanceMultiplier(enemyImportance),                                      // Critical multiplier is not affected by stage
+            criticalChance = enemyStats.criticalChance * GetImportanceMultiplier(enemyImportance),                                              // Critical chance is not affected by stage
             criticalDamage = Mathf.RoundToInt((Mathf.RoundToInt((enemyStats.attackPower * GetStageMultiplier(stage)) * GetImportanceMultiplier(enemyImportance)) * (enemyStats.criticalMultiplier * GetImportanceMultiplier(enemyImportance))) * GetImportanceMultiplier(enemyImportance)),
             exp = Mathf.RoundToInt((enemyStats.exp * GetStageMultiplier(stage)) * GetImportanceMultiplier(enemyImportance))
         };

@@ -8,10 +8,13 @@ public struct EnemyStats
 {
     public int level;
     public int HP;
+    public int maxHP;
     public int SP;
+    public int maxSP;
     public int attackPower;
     public int defence;
     public int agility;
+    public float evadeChance;
     public float criticalChance;
     public int criticalDamage;
     public float criticalMultiplier;
@@ -51,13 +54,17 @@ public struct EnemyChances
 [System.Serializable]
 public struct PlayerStats
 {
+    public string name;
     public int level;
     public int HP;
+    public int maxHP;
     public int SP;
+    public int maxSP;
     public int attackPower;
     public int defence;
     public int agility;
     public int accuracy;
+    public float evadeChance;
     public float criticalChance;
     public int criticalDamage;
     public float criticalMultiplier;

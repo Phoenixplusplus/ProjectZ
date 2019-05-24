@@ -8,15 +8,13 @@ public class PlayerManager : MonoBehaviour
     [SerializeField]
     PlayerStatMultipliers playerStatMultipliers;
 
-    [Header("Class References")]
-    [SerializeField]
     PlayerConfigurer playerConfigurer = null;
 
     #region Unity API
     // Start is called before the first frame update
     void Start()
     {
-        
+        playerConfigurer = GetComponent<PlayerConfigurer>();
     }
 
     // Update is called once per frame
@@ -25,11 +23,9 @@ public class PlayerManager : MonoBehaviour
         
     }
     #endregion
-
-    public void GivePlayerEXP(int exp)
-    {
-        playerConfigurer.ConfigureEXP(exp, playerStatMultipliers.expToNextLevelMultiplier);
-    }
+    
     public PlayerStats GetPlayerStats() { return playerConfigurer.GetPlayerStats(); }
-    public bool GetPlayerCriticalHit() { return playerConfigurer.GetPlayerCriticalHit(); }
+    public float GetPlayerCriticalChance() { return playerConfigurer.GetPlayerCriticalChance(); }
+    public void GivePlayerEXP(int exp) { playerConfigurer.ConfigureEXP(exp, playerStatMultipliers.expToNextLevelMultiplier); }
+    public void PlayerTakeDamage(Enemy attackingEnemy) { playerConfigurer.ConfigureTakeDamage(attackingEnemy); }
 }

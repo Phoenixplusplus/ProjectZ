@@ -21,10 +21,13 @@ public class EnemyManager : MonoBehaviour
     [SerializeField]
     EnemyMaker enemyMaker = null;
 
+    EnemyConfigurer enemyConfigurer = null;
+
     #region Unity API
     // Start is called before the first frame update
     void Start()
     {
+        enemyConfigurer = GetComponent<EnemyConfigurer>();
         enemyMaker.enemyStatMultipliers = enemyStatMultipliers;
         enemyMaker.enemyChances = enemyChances;
     }
@@ -48,7 +51,13 @@ public class EnemyManager : MonoBehaviour
 
     // GameManager calls
     #region GameManager Calls
-    public void AttackAllEnemies(int damageTaken, bool critical)
+
+    public void EnemyTakeDamage(Enemy selectedEnemy, PlayerStats playerStats)
+    {
+        enemyConfigurer.ConfigureTakeDamage(selectedEnemy, playerStats);
+    }
+
+    public void AllEnemiesTakeDamage(PlayerStats playerStats)
     {
         // If ever needing to attack all enemies available..
         // While iterating over a list, it is possible an earlier element has been removed, and will cause problems.
@@ -61,7 +70,7 @@ public class EnemyManager : MonoBehaviour
         }
         foreach (GameObject enemy in tempList)
         {
-            enemy.GetComponent<Enemy>().TakeDamage(damageTaken, critical);
+            EnemyTakeDamage(enemy.GetComponent<Enemy>(), playerStats);
         }
     }
 

@@ -11,6 +11,9 @@ public class Enemy : MonoBehaviour, IDamagable<int>, IKillable
     // Event to be sent when enemy is clicked on
     public delegate void EnemyClicked(Enemy selectedEnemy);
     public static event EnemyClicked EnemySelected;
+    // Event to be sent when enemy wants to attack
+    public delegate void EnemyAttack(Enemy attackingEnemy);
+    public static event EnemyAttack EnemyWantsToAttack;
 
     [Header("Enemy Stats")]
     public EnemyImportance enemyImportance;
@@ -45,7 +48,8 @@ public class Enemy : MonoBehaviour, IDamagable<int>, IKillable
         }
         // Configure damageNumber and spawn it
         damageNumberComponent.critical = critical;
-        damageNumberComponent.text = damageTaken.ToString();
+        if (damageTaken == 0) damageNumberComponent.text = "Evaded";
+        else damageNumberComponent.text = damageTaken.ToString();
         damageNumberComponent.clickedPosition = clickedPosition;
         Instantiate(damageNumberUI, clickedPosition, Quaternion.identity);
 
@@ -74,7 +78,11 @@ public class Enemy : MonoBehaviour, IDamagable<int>, IKillable
     // Update is called once per frame
     void Update()
     {
-        
+        // Attack Test
+        if (Input.GetKeyDown(KeyCode.Alpha5))
+        {
+            if (EnemyWantsToAttack != null) EnemyWantsToAttack(this);
+        }
     }
 
     void OnMouseDown()
@@ -95,6 +103,7 @@ public class Enemy : MonoBehaviour, IDamagable<int>, IKillable
 
     public void Deselected()
     {
+        clickedPosition = Vector3.zero;
         enemySelectUI.EnemyDeselected();
     }
 }

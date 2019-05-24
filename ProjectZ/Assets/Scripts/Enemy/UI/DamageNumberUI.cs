@@ -26,12 +26,9 @@ public class DamageNumberUI : MonoBehaviour
     float bottomTime = 1f;
 
     [Header("Lerp to Local Locations")]
-    [SerializeField]
-    Vector3 topVector = Vector3.zero;
-    [SerializeField]
-    Vector3 bottomVector = Vector3.zero;
-    [SerializeField]
-    float randomZVariant = 1f;
+    public Vector3 topVector = Vector3.zero;
+    public Vector3 bottomVector = Vector3.zero;
+    public float randomZVariant = 1f;
 
     [Header("Object References")]
     [SerializeField]
