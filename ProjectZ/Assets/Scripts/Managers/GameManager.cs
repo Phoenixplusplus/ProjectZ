@@ -48,7 +48,7 @@ public class GameManager : MonoBehaviour
             stageComplete = false;
             levelManager.ResetLevel();
         }
-        if (Input.GetKeyDown(KeyCode.Alpha3)) enemyManager.SpawnEnemy(enemiesToSpawn, levelManager.atUnit, true, stage, levelManager.GetNextEnemySpawnPositions(enemiesToSpawn), new Vector3(0, 90, 0));
+        if (Input.GetKeyDown(KeyCode.Alpha3)) enemyManager.SpawnEnemy(enemiesToSpawn, levelManager.atUnit, true, stage, levelManager.GetNextEnemySpawnPositions(enemiesToSpawn), new Vector3(0, 270, 0));
         if (Input.GetKeyDown(KeyCode.Alpha4))
         {
             if (selectedEnemy)
@@ -138,12 +138,12 @@ public class GameManager : MonoBehaviour
         if (levelManager.atUnit == levelManager.levelUnits)
         {
             Debug.Log("GameManager:: Heard from EventManager that a Unit was successfully incremented.. Spawning Boss");
-            enemyManager.SpawnEnemy(enemiesToSpawn, levelManager.atUnit, EnemyImportance.Boss, true, stage, levelManager.GetNextEnemySpawnPositions(enemiesToSpawn), new Vector3(0, 90, 0));
+            enemyManager.SpawnEnemy(enemiesToSpawn, levelManager.atUnit, EnemyImportance.Boss, true, stage, levelManager.GetNextEnemySpawnPositions(enemiesToSpawn), new Vector3(0, 270, 0));
         }
         else
         {
             Debug.Log("GameManager:: Heard from EventManager that a Unit was successfully incremented.. Spawning next enemies");
-            enemyManager.SpawnEnemy(enemiesToSpawn, levelManager.atUnit, true, stage, levelManager.GetNextEnemySpawnPositions(enemiesToSpawn), new Vector3(0, 90, 0));
+            enemyManager.SpawnEnemy(enemiesToSpawn, levelManager.atUnit, true, stage, levelManager.GetNextEnemySpawnPositions(enemiesToSpawn), new Vector3(0, 270, 0));
         }
     }
 

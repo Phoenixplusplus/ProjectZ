@@ -846,11 +846,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemies:
-    E_Cube: {fileID: 1907423367830922786, guid: 7ba0dc98e09feeb48a3573a9376a113a,
+    E_Cube: {fileID: 167666470018770032, guid: 42521377a04174d47bbf516e3fb457eb, type: 3}
+    E_Capsule: {fileID: 870423982585555667, guid: babc591984d5ca94cb354cf4926ea071,
       type: 3}
-    E_Capsule: {fileID: 1078493110469737574, guid: 19c605baf55630140a8d4ff98cf389a4,
-      type: 3}
-    E_Sphere: {fileID: 7566857195432393476, guid: c519f32fd7d9c6044994a188242f4a6c,
+    E_Sphere: {fileID: 2104222418880690151, guid: 5c5ee99d03ced0847882fb56f0fbf279,
       type: 3}
   enemyStatMultipliers:
     stageStatMultiplier: 0
@@ -1025,11 +1024,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1191608605}
     m_Modifications:
-    - target: {fileID: 6088549528620967661, guid: 120dc9f9976446346bce0a45e8533e25,
-        type: 3}
-      propertyPath: m_Name
-      value: PlayerNameHPSPEXP
-      objectReference: {fileID: 0}
     - target: {fileID: 6088549528620967662, guid: 120dc9f9976446346bce0a45e8533e25,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1134,6 +1128,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6088549528620967661, guid: 120dc9f9976446346bce0a45e8533e25,
+        type: 3}
+      propertyPath: m_Name
+      value: PlayerNameHPSPEXP
       objectReference: {fileID: 0}
     - target: {fileID: 6088549529548753311, guid: 120dc9f9976446346bce0a45e8533e25,
         type: 3}

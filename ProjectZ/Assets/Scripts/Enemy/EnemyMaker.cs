@@ -13,10 +13,6 @@ public class EnemyMaker : MonoBehaviour
     [Header("Enemy Chances")]
     public EnemyChances enemyChances;
 
-    Vector3 cubeOffset = new Vector3(0f, 0.5f, 0f);
-    Vector3 sphereOffset = new Vector3(0f, 0.5f, 0f);
-    Vector3 capsuleOffset = new Vector3(0f, 1f, 0f);
-
     GameObject madeEnemy;
 
     #region Unity API
@@ -38,19 +34,19 @@ public class EnemyMaker : MonoBehaviour
         switch (enemyName)
         {
             case EnemyName.E_Cube:
-                madeEnemy = Instantiate(enemies.E_Cube, position + cubeOffset, Quaternion.identity);
+                madeEnemy = Instantiate(enemies.E_Cube, position, Quaternion.identity);
                 madeEnemy.transform.eulerAngles = rotation;
                 ConfigureEnemy(madeEnemy, enemyImportance, randomRareImportance, stage);
                 madeEnemy.transform.parent = this.gameObject.transform;
                 return madeEnemy;
             case EnemyName.E_Capsule:
-                madeEnemy = Instantiate(enemies.E_Capsule, position + capsuleOffset, Quaternion.identity);
+                madeEnemy = Instantiate(enemies.E_Capsule, position, Quaternion.identity);
                 madeEnemy.transform.eulerAngles = rotation;
                 ConfigureEnemy(madeEnemy, enemyImportance, randomRareImportance, stage);
                 madeEnemy.transform.parent = this.gameObject.transform;
                 return madeEnemy;
             case EnemyName.E_Sphere:
-                madeEnemy = Instantiate(enemies.E_Sphere, position + sphereOffset, Quaternion.identity);
+                madeEnemy = Instantiate(enemies.E_Sphere, position, Quaternion.identity);
                 madeEnemy.transform.eulerAngles = rotation;
                 ConfigureEnemy(madeEnemy, enemyImportance, randomRareImportance, stage);
                 madeEnemy.transform.parent = this.gameObject.transform;
@@ -64,19 +60,19 @@ public class EnemyMaker : MonoBehaviour
         switch (enemyName)
         {
             case EnemyName.E_Cube:
-                madeEnemy = Instantiate(enemies.E_Cube, position + cubeOffset, Quaternion.identity);
+                madeEnemy = Instantiate(enemies.E_Cube, position, Quaternion.identity);
                 madeEnemy.transform.eulerAngles = rotation;
                 ConfigureEnemy(madeEnemy, randomRareImportance, stage);
                 madeEnemy.transform.parent = this.gameObject.transform;
                 return madeEnemy;
             case EnemyName.E_Capsule:
-                madeEnemy = Instantiate(enemies.E_Capsule, position + capsuleOffset, Quaternion.identity);
+                madeEnemy = Instantiate(enemies.E_Capsule, position, Quaternion.identity);
                 madeEnemy.transform.eulerAngles = rotation;
                 ConfigureEnemy(madeEnemy, randomRareImportance, stage);
                 madeEnemy.transform.parent = this.gameObject.transform;
                 return madeEnemy;
             case EnemyName.E_Sphere:
-                madeEnemy = Instantiate(enemies.E_Sphere, position + sphereOffset, Quaternion.identity);
+                madeEnemy = Instantiate(enemies.E_Sphere, position, Quaternion.identity);
                 madeEnemy.transform.eulerAngles = rotation;
                 ConfigureEnemy(madeEnemy, randomRareImportance, stage);
                 madeEnemy.transform.parent = this.gameObject.transform;
@@ -89,7 +85,7 @@ public class EnemyMaker : MonoBehaviour
     // overload with EnemyImportance if a set importance is desired, else it will randomise it between Normal and MiniBoss
     void ConfigureEnemy(GameObject madeEnemy, EnemyImportance enemyImportance, bool randomRareImportance, int stage)
     {
-        Enemy enemyComponent = madeEnemy.GetComponent<Enemy>();
+        Enemy enemyComponent = madeEnemy.GetComponentInChildren<Enemy>();
         enemyComponent.enemyImportance = enemyImportance;
         if (randomRareImportance) enemyComponent.enemyImportance = RandomiseRareImportance(enemyImportance);
         enemyComponent.enemyStats = ConfigureStats(enemyComponent.enemyStats, enemyComponent.enemyImportance, stage);
@@ -97,7 +93,7 @@ public class EnemyMaker : MonoBehaviour
 
     void ConfigureEnemy(GameObject madeEnemy, bool randomRareImportance, int stage)
     {
-        Enemy enemyComponent = madeEnemy.GetComponent<Enemy>();
+        Enemy enemyComponent = madeEnemy.GetComponentInChildren<Enemy>();
         enemyComponent.enemyImportance = RandomiseImportance();
         if (randomRareImportance) enemyComponent.enemyImportance = RandomiseRareImportance(enemyComponent.enemyImportance);
         enemyComponent.enemyStats = ConfigureStats(enemyComponent.enemyStats, enemyComponent.enemyImportance, stage);

@@ -70,7 +70,7 @@ public class EnemyManager : MonoBehaviour
         }
         foreach (GameObject enemy in tempList)
         {
-            EnemyTakeDamage(enemy.GetComponent<Enemy>(), playerStats);
+            EnemyTakeDamage(enemy.GetComponentInChildren<Enemy>(), playerStats);
         }
     }
 

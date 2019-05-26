@@ -21,6 +21,20 @@ public class Enemy : MonoBehaviour, IDamagable<int>, IKillable
     public EnemyName enemyName;
     public EnemyStats enemyStats;
 
+    // Animations chiefly control the flow of attacks and delays
+    [Header("Animation & Attack")]
+    [SerializeField]
+    float minAttackDelay = 1.5f;
+    [SerializeField]
+    float maxAttackDelay = 3f;
+    [SerializeField]
+    float secondComboChance = 35f;
+    [SerializeField]
+    float thirdComboChance = 35f;
+    float startMinAttackDelay = 1f;
+    float startMaxAttackDelay = 2f;
+    Animator animator = null;
+
     [Header("Class References")]
     [SerializeField]
     EnemyOverheadUI enemyOverheadUI = null;
@@ -30,6 +44,7 @@ public class Enemy : MonoBehaviour, IDamagable<int>, IKillable
     GameObject damageNumberUI = null;
     DamageNumberUI damageNumberComponent = null;
 
+    // Used to position the damageNumberUI Worldspace
     Vector3 clickedPosition = Vector3.zero;
 
     #region Interface Functions
@@ -44,7 +59,7 @@ public class Enemy : MonoBehaviour, IDamagable<int>, IKillable
         // In the event that an enemy is attacked without being clicked on
         if (clickedPosition == Vector3.zero)
         {
-            clickedPosition = transform.position + Vector3.Normalize(Camera.main.transform.position - transform.position) * 1.3f;
+            clickedPosition = transform.position + ((Vector3.Normalize(Camera.main.transform.position - transform.position) / 2f));
         }
         // Configure damageNumber and spawn it
         damageNumberComponent.critical = critical;
@@ -63,7 +78,7 @@ public class Enemy : MonoBehaviour, IDamagable<int>, IKillable
     {
         Debug.Log("Enemy:: " + name + " was killed");
         // Send message that this enemy has died
-        if (EnemyDied != null) EnemyDied(this.gameObject, enemyStats.exp);
+        if (EnemyDied != null) EnemyDied(this.transform.parent.gameObject, enemyStats.exp);
     }
     #endregion
 
@@ -73,16 +88,16 @@ public class Enemy : MonoBehaviour, IDamagable<int>, IKillable
     {
         enemyOverheadUI.ConfigureOverheadUI(enemyStats, enemyName, enemyImportance);
         damageNumberComponent = damageNumberUI.GetComponent<DamageNumberUI>();
+        animator = GetComponent<Animator>();
+        animator.speed = 1 + Mathf.Clamp01(enemyStats.agility / 300);
+
+        AttackDelay();
     }
 
     // Update is called once per frame
     void Update()
     {
-        // Attack Test
-        if (Input.GetKeyDown(KeyCode.Alpha5))
-        {
-            if (EnemyWantsToAttack != null) EnemyWantsToAttack(this);
-        }
+
     }
 
     void OnMouseDown()
@@ -92,7 +107,7 @@ public class Enemy : MonoBehaviour, IDamagable<int>, IKillable
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit))
         {
-            enemySelectUI.transform.position = hit.point + (Vector3.Normalize(Camera.main.transform.position - hit.point) * 1.3f); // Bring world UI slightly closer to camera
+            enemySelectUI.transform.position = hit.point + ((Vector3.Normalize(Camera.main.transform.position - hit.point) / 2f)); // Bring world UI slightly closer to camera
             clickedPosition = enemySelectUI.transform.position;
         }
         // Send message that this enemy was clicked on
@@ -101,9 +116,40 @@ public class Enemy : MonoBehaviour, IDamagable<int>, IKillable
     }
     #endregion
 
+    // Called by GameManager when another enemy other than this one has been clicked, and this enemy was the previous clicked enemy
     public void Deselected()
     {
         clickedPosition = Vector3.zero;
         enemySelectUI.EnemyDeselected();
+    }
+
+    // Primary event call by animations when they want to attack the player
+    public void Attack()
+    {
+        if (EnemyWantsToAttack != null) EnemyWantsToAttack(this);
+    }
+
+    // Animation and Attacking Coroutines with their corresponding function calls
+    void AttackDelay() { StartCoroutine(AttackDelay_IE()); }
+    IEnumerator AttackDelay_IE()
+    {
+        animator.SetBool("Attack", false);
+        animator.SetBool("Attack2", false);
+        animator.SetBool("Attack3", false);
+        yield return new WaitForSeconds(Random.Range(minAttackDelay, maxAttackDelay));
+        animator.SetBool("Attack", true);
+        yield break;
+    }
+
+    void ComboOneFinish()
+    {
+        if (Random.Range(0, 100) <= secondComboChance) animator.SetBool("Attack2", true);
+        else AttackDelay();
+    }
+
+    void ComboTwoFinish()
+    {
+        if (Random.Range(0, 100) <= thirdComboChance) animator.SetBool("Attack3", true);
+        else AttackDelay();
     }
 }
