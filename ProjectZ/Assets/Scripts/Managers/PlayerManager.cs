@@ -25,6 +25,7 @@ public class PlayerManager : MonoBehaviour
     #endregion
     
     public PlayerStats GetPlayerStats() { return playerConfigurer.GetPlayerStats(); }
+    public void UpdatePlayerStats() { playerConfigurer.ConfigurePlayerStats(); }
     public float GetPlayerCriticalChance() { return playerConfigurer.GetPlayerCriticalChance(); }
     public void GivePlayerEXP(int exp) { playerConfigurer.ConfigureEXP(exp, playerStatMultipliers.expToNextLevelMultiplier); }
     public void PlayerTakeDamage(Enemy attackingEnemy) { playerConfigurer.ConfigureTakeDamage(attackingEnemy); }

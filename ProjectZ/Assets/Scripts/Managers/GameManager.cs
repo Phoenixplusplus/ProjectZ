@@ -51,15 +51,7 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha3)) enemyManager.SpawnEnemy(enemiesToSpawn, levelManager.atUnit, true, stage, levelManager.GetNextEnemySpawnPositions(enemiesToSpawn), new Vector3(0, 270, 0));
         if (Input.GetKeyDown(KeyCode.Alpha4))
         {
-            if (selectedEnemy)
-            {
-                enemyManager.EnemyTakeDamage(selectedEnemy, playerManager.GetPlayerStats());
-            }
-            // Attack all enemies if one is not targeted, temporary
-            else
-            {
-                enemyManager.AllEnemiesTakeDamage(playerManager.GetPlayerStats());
-            }
+
         }
         if (Input.GetKeyDown(KeyCode.Alpha5))
         {
@@ -77,6 +69,7 @@ public class GameManager : MonoBehaviour
         EventManager.PassOnAtEndOfLevel += EndOfLevelReached;
         EventManager.PassOnPlayerDied += PlayerHasDied;
         EventManager.PassOnEnemyWantsToAttack += EnemyAttackPlayer;
+        EventManager.PassOnPlayerRequestAttack += PlayerAttack;
     }
 
     void OnDisable()
@@ -88,6 +81,7 @@ public class GameManager : MonoBehaviour
         EventManager.PassOnAtEndOfLevel -= EndOfLevelReached;
         EventManager.PassOnPlayerDied -= PlayerHasDied;
         EventManager.PassOnEnemyWantsToAttack -= EnemyAttackPlayer;
+        EventManager.PassOnPlayerRequestAttack -= PlayerAttack;
     }
     #endregion
 
@@ -103,6 +97,21 @@ public class GameManager : MonoBehaviour
     void PlayerHasDied()
     {
         Debug.Log("GameManager:: Heard from EventManager that player has died");
+    }
+
+    // Callback to event from EventManager, player wants to apply damage
+    void PlayerAttack()
+    {
+        Debug.Log("GameManager:: Heard from EventManager that player wants to apply damage now");
+        if (selectedEnemy)
+        {
+            enemyManager.EnemyTakeDamage(selectedEnemy, playerManager.GetPlayerStats());
+        }
+        // Attack all enemies if one is not targeted, temporary
+        else
+        {
+            enemyManager.AllEnemiesTakeDamage(playerManager.GetPlayerStats());
+        }
     }
 
     // Callback to event from EventManager, which passed the e_selectedEnemy through

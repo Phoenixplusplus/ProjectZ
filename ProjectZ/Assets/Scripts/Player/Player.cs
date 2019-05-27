@@ -7,6 +7,9 @@ public class Player : MonoBehaviour, IDamagable<int>, IKillable
     // Event to be sent when player dies
     public delegate void PlayerDeath();
     public static event PlayerDeath PlayerDied;
+    // Event to be sent when player requests to apply damage
+    public delegate void PlayerAttack();
+    public static event PlayerAttack PlayerRequestAttack;
 
     [Header("Player Stats")]
     public EnemyElement playerElement;
@@ -18,17 +21,36 @@ public class Player : MonoBehaviour, IDamagable<int>, IKillable
     GameObject damageNumberUI = null;
     DamageNumberUI damageNumberComponent = null;
 
+    Animator animator = null;
+    int timedAttackCount = 1;
+    int maxTimedAttackCount = 3;
+
     #region Unity API
     // Start is called before the first frame update
     void Start()
     {
         damageNumberComponent = damageNumberUI.GetComponent<DamageNumberUI>();
+        animator = transform.GetComponent<Animator>();
+
+        SetIdle();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
+    }
+
+    void OnEnable()
+    {
+        EventManager.PassOnPlayerPrimaryAttacked += PrimaryAttack;
+        EventManager.PassOnPlayerPrimaryTimedAttacked += TimedAttack;
+    }
+
+    void OnDisable()
+    {
+        EventManager.PassOnPlayerPrimaryAttacked -= PrimaryAttack;
+        EventManager.PassOnPlayerPrimaryTimedAttacked += TimedAttack;
     }
     #endregion Unity API
 
@@ -69,4 +91,46 @@ public class Player : MonoBehaviour, IDamagable<int>, IKillable
         isDead = false;
     }
     #endregion
+
+    // Animation
+    void SetIdle()
+    {
+        animator.SetBool("Idle", true);
+    }
+
+    // Callback to event from EventManager->PrimaryAttack_UI, when the attack button is pressed without TimedAttack
+    void PrimaryAttack()
+    {
+        animator.SetBool("UnarmedPrimaryAttack1", true);
+    }
+
+    // Callback to event from EventManager->PrimaryAttack_UI, when the attack button is pressed with TimedAttack
+    void TimedAttack()
+    {
+        // Later, determine the maximum number of timedAttack chains that can happen for a specific weapon
+        // at the moment, there will only be 2 more chains
+        timedAttackCount++;
+        if (timedAttackCount > 3) timedAttackCount = 1;
+        animator.SetBool("UnarmedPrimaryAttack" + timedAttackCount, true);
+    }
+
+    // Animation Calls
+    // Event called to tell EventManager->GameManager to apply damage
+    public void PlayerApplyDamage()
+    {
+        if (PlayerRequestAttack != null) PlayerRequestAttack();
+    }
+
+    void PrimaryAttackFinish()
+    {
+        animator.SetBool("UnarmedPrimaryAttack1", false);
+        animator.SetBool("UnarmedPrimaryAttack2", false);
+        animator.SetBool("UnarmedPrimaryAttack3", false);
+        timedAttackCount = 1;
+    }
+
+    // Annoyingly, seems that animation events can only call functions with no parameters
+    void AttackOneFalse() { animator.SetBool("UnarmedPrimaryAttack1", false); }
+    void AttackTwoFalse() { animator.SetBool("UnarmedPrimaryAttack2", false); }
+    void AttackThreeFalse() { animator.SetBool("UnarmedPrimaryAttack3", false); }
 }

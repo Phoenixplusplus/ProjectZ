@@ -14,6 +14,9 @@ public class EventManager : MonoBehaviour
     // Event to be sent when at the end of level
     public delegate void PassOnEndOfLevel();
     public static event PassOnEndOfLevel PassOnAtEndOfLevel;
+    // An enemy wants to attack
+    public delegate void PassOnEnemyAttack(Enemy attackingEnemy);
+    public static event PassOnEnemyAttack PassOnEnemyWantsToAttack;
     // An Enemy has died
     public delegate void PassOnEnemyDeath(GameObject killedEnemy, int exp);
     public static event PassOnEnemyDeath PassOnEnemyDied;
@@ -26,9 +29,15 @@ public class EventManager : MonoBehaviour
     // Player died
     public delegate void PassOnPlayerDeath();
     public static event PassOnPlayerDeath PassOnPlayerDied;
-    // An enemy wants to attack
-    public delegate void PassOnEnemyAttack(Enemy attackingEnemy);
-    public static event PassOnEnemyAttack PassOnEnemyWantsToAttack;
+    // Player requests attack
+    public delegate void PassOnPlayerAttack();
+    public static event PassOnPlayerAttack PassOnPlayerRequestAttack;
+    // Player UI Primary Attack pressed
+    public delegate void PassOnPlayerPrimaryAttack();
+    public static event PassOnPlayerPrimaryAttack PassOnPlayerPrimaryAttacked;
+    // Player UI Primary Attack pressed when 'Timed Attacked'
+    public delegate void PassOnPlayerPrimaryTimedAttack();
+    public static event PassOnPlayerPrimaryTimedAttack PassOnPlayerPrimaryTimedAttacked;
 
     #region Unity API
     // Start is called before the first frame update
@@ -54,6 +63,9 @@ public class EventManager : MonoBehaviour
         LevelManager.AtEndOfLevel += BroadcastAtEndOfLevel;
         EnemyManager.AllEnemiesDied += BroadcastAllEnemiesDied;
         Player.PlayerDied += BroadcastPlayerDied;
+        Player.PlayerRequestAttack += BroadcastPlayerRequestAttack;
+        PrimaryAttack_UI.PlayerPrimaryAttacked += BroadcastPlayerPrimaryAttacked;
+        PrimaryAttack_UI.PlayerPrimaryTimedAttacked += BroadcastPlayerPrimaryTimedAttacked;
     }
     void OnDisable()
     {
@@ -65,6 +77,9 @@ public class EventManager : MonoBehaviour
         LevelManager.AtEndOfLevel -= BroadcastAtEndOfLevel;
         EnemyManager.AllEnemiesDied -= BroadcastAllEnemiesDied;
         Player.PlayerDied -= BroadcastPlayerDied;
+        Player.PlayerRequestAttack -= BroadcastPlayerRequestAttack;
+        PrimaryAttack_UI.PlayerPrimaryAttacked -= BroadcastPlayerPrimaryAttacked;
+        PrimaryAttack_UI.PlayerPrimaryTimedAttacked -= BroadcastPlayerPrimaryTimedAttacked;
     }
     #endregion
 
@@ -115,5 +130,23 @@ public class EventManager : MonoBehaviour
     {
         if (PassOnEnemyWantsToAttack != null) PassOnEnemyWantsToAttack(attackingEnemy);
         Debug.Log("EventManager:: Heared from " + attackingEnemy.name + " it wants to attack.. Broadcasting");
+    }
+
+    void BroadcastPlayerRequestAttack()
+    {
+        if (PassOnPlayerRequestAttack != null) PassOnPlayerRequestAttack();
+        Debug.Log("EventManager:: Heared from Player it wants to attack.. Broadcasting");
+    }
+
+    void BroadcastPlayerPrimaryAttacked()
+    {
+        if (PassOnPlayerPrimaryAttacked != null) PassOnPlayerPrimaryAttacked();
+        Debug.Log("EventManager:: Heared from PlayerAttack_UI, Primary Attack has been pressed.. Broadcasting");
+    }
+
+    void BroadcastPlayerPrimaryTimedAttacked()
+    {
+        if (PassOnPlayerPrimaryTimedAttacked != null) PassOnPlayerPrimaryTimedAttacked();
+        Debug.Log("EventManager:: Heared from PlayerAttack_UI, PrimaryTimedAttack has been activated.. Broadcasting");
     }
 }

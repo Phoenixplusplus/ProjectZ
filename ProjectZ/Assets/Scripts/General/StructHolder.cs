@@ -64,6 +64,7 @@ public struct PlayerStats
     public int defence;
     public int agility;
     public int accuracy;
+    public int luck;
     public float evadeChance;
     public float criticalChance;
     public int criticalDamage;

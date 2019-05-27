@@ -22,6 +22,7 @@ public class PlayerConfigurer : MonoBehaviour
     }
     #endregion
 
+    // Makes sense to also alter HP while leveling up here
     public void ConfigureEXP(int exp, float expToNextLevelMultiplier)
     {
         player.playerStats.exp += exp;
@@ -45,6 +46,8 @@ public class PlayerConfigurer : MonoBehaviour
     public void ConfigurePlayerStats()
     {
         player.playerStats.criticalDamage = Mathf.RoundToInt(player.playerStats.attackPower * player.playerStats.criticalMultiplier);
+        player.playerStats.evadeChance = Mathf.RoundToInt(Mathf.Clamp(player.playerStats.agility / 5, 0, 95));
+        player.playerStats.criticalChance = Mathf.RoundToInt(Mathf.Clamp(player.playerStats.luck / 3, 0, 100));
     }
 
     public void ConfigureTakeDamage(Enemy attackingEnemy)
@@ -61,6 +64,12 @@ public class PlayerConfigurer : MonoBehaviour
 
         // Check if attack will be evaded. If damage is critical, it cannot be evaded
         if (Random.Range(0f, 100f) <= player.playerStats.evadeChance) damageTaken = 0;
+
+        // Reduce damageTaken by defence amount. Critical hits ignore defence
+        damageTaken -= player.playerStats.defence;
+
+        // Any damage less than 0, must be 0
+        if (damageTaken < 0) damageTaken = 0;
 
         if (isCritical) player.TakeDamage(criticalDamage, isCritical);
         else player.TakeDamage(damageTaken, isCritical);

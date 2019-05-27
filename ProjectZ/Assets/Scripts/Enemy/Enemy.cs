@@ -89,7 +89,7 @@ public class Enemy : MonoBehaviour, IDamagable<int>, IKillable
         enemyOverheadUI.ConfigureOverheadUI(enemyStats, enemyName, enemyImportance);
         damageNumberComponent = damageNumberUI.GetComponent<DamageNumberUI>();
         animator = GetComponent<Animator>();
-        animator.speed = 1 + Mathf.Clamp01(enemyStats.agility / 300);
+        animator.speed = 1 + Mathf.Clamp01(enemyStats.agility / 600);
 
         AttackDelay();
     }
